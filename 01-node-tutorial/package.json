@@ -1,0 +1,14 @@
+{
+  "name": "01-node-tutorial",
+  "version": "1.0.0",
+  "description": "",
+  "main": "09-path-module.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
