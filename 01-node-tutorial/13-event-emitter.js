@@ -1,0 +1,18 @@
+const EventEmitter = require('events');
+
+const customEmitter = new EventEmitter();
+
+// order matters (can't emit before listening otherwise nothing happens)
+
+// listen for event
+customEmitter.on('response', (name, id) => {
+  console.log(`data recieved user ${name} with id: ${id}`);
+});
+
+customEmitter.on('response', () => {
+  console.log(`some other logic here`);
+});
+
+// emit event
+// passing args john and 34 to any event listener(s)
+customEmitter.emit('response', 'john', 34);
