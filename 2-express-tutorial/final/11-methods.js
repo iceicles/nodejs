@@ -19,7 +19,7 @@ app.get('/api/people', (req, res) => {
 
 app.post('/api/people', (req, res) => {
   const { name } = req.body; // can do this thanks to the middleware express.json that parses and attaches to body
-  console.log('name - ', name);
+  // console.log('name - ', name);
   if (!name)
     return res
       .status(400)
