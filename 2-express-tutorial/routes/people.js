@@ -1,70 +1,32 @@
 const express = require('express');
 const router = express.Router();
 
-let { people } = require('../data');
+const {
+  getPeople,
+  createPerson,
+  createPersonPostman,
+  updatePerson,
+  deletePerson,
+} = require('../controllers/people');
 
 /* No need to have /api/people for base route because app.js peopleRouter already uses it - can just have / instead
  */
-router.get('/', (req, res) => {
-  res.status(200).json({ success: true, data: people });
-});
 
-router.post('/', (req, res) => {
-  const { name } = req.body; // can do this thanks to the middleware express.json that parses and attaches to body
-  // console.log('name - ', name);
-  if (!name)
-    return res
-      .status(400)
-      .json({ sucess: false, msg: 'please provide name value' });
-  res.status(201).json({ success: true, person: name });
-});
+// router.get('/', getPeople);
 
-// using postman :)
-router.post('/postman', (req, res) => {
-  const { name } = req.body;
-  if (!name) {
-    return res
-      .status(400)
-      .json({ success: false, msg: 'please provide name value' });
-  }
-  res.status(201).json({ success: true, data: [...people, name] });
-});
+// router.post('/', createPerson);
 
-router.put('/:id', (req, res) => {
-  const { id } = req.params;
-  const { name } = req.body;
+// // using postman :)
+// router.post('/postman', createPersonPostman);
 
-  // console.log(id, name);
-  const person = people.find((person) => person.id === Number(id));
+// router.put('/:id', updatePerson);
 
-  if (!person) {
-    return res
-      .status(404)
-      .json({ success: false, msg: `no person with id ${id}` });
-  }
+// router.delete('/:id', deletePerson);
 
-  const newPeople = people.map((person) => {
-    if (person.id === Number(id)) {
-      person.name = name;
-    }
-    return person;
-  });
-  res.status(200).json({ success: true, data: newPeople });
-});
+// another way to setup routes (same functionality, fewer lines) -
 
-router.delete('/:id', (req, res) => {
-  const { id } = req.params;
-
-  const person = people.find((person) => person.id === Number(id));
-
-  if (!person) {
-    return res
-      .status(404)
-      .json({ success: false, msg: `no person with id ${id}` });
-  }
-
-  const newPeople = people.filter((person) => person.id !== Number(id));
-  res.status(200).json({ success: true, data: newPeople });
-});
+router.route('/').get(getPeople).post(createPerson);
+router.route('/postman').post(createPersonPostman);
+router.route('/:id').put(updatePerson).delete(deletePerson);
 
 module.exports = router;
