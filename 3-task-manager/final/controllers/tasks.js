@@ -5,8 +5,14 @@ const getAllTasks = (req, res) => {
 };
 
 const createTask = async (req, res) => {
-  const task = await Task.create(req.body);
-  res.status(201).json({ task });
+  try {
+    // remember - req.body is the body attached to the request...
+    // ...and 'app.use(express.json())' middleware parses the body of the request of type json and attaches it to req property
+    const task = await Task.create(req.body);
+    res.status(201).json({ task });
+  } catch (error) {
+    res.status(500).json({ msg: error });
+  }
 };
 
 const getTask = (req, res) => {
