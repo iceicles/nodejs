@@ -5,6 +5,7 @@ const getAllTasks = (req, res) => {
 };
 
 const createTask = async (req, res) => {
+  // wrapping in try/catch block to gracefully handle invalid body requests as setup and validated in our schema
   try {
     // remember - req.body is the body attached to the request...
     // ...and 'app.use(express.json())' middleware parses the body of the request of type json and attaches it to req property
