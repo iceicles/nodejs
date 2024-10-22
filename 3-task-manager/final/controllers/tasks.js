@@ -21,8 +21,19 @@ const createTask = async (req, res) => {
   }
 };
 
-const getTask = (req, res) => {
-  res.send({ id: req.params.id });
+const getTask = async (req, res) => {
+  try {
+    const { id: taskID } = req.params;
+    const task = await Task.findOne({ _id: taskID }); // or findById(taskId)
+    if (!task) {
+      // if task ID is right length but doesn't exist
+      return res.status(404).json({ msg: `No task with id : ${taskID}` });
+    }
+    res.status(200).send({ task });
+  } catch (error) {
+    // if taskID is wrong length (responds with mongoose err msg)
+    res.status(500).json({ msg: error });
+  }
 };
 
 const updateTask = (req, res) => {
