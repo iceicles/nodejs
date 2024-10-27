@@ -16,7 +16,7 @@ app.use('/api/v1/tasks', tasksRouter);
 app.use(notFound); // handle invalid route with custom response
 app.use(errorHandlerMiddleware); // handle invalid request
 
-const port = 3000;
+const port = process.env.PORT || 3000; // allows us to use the port set by the hosting service or ours for local dev (3000)
 
 const start = async () => {
   try {
