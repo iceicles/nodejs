@@ -1,8 +1,9 @@
 const Product = require('../models/product');
 
 const getAllProductsStatic = async (req, res) => {
+  const search = 'ab';
   const products = await Product.find({
-    name: 'vase table',
+    name: { $regex: search, $options: 'i' },
   });
   // we can use the pkg 'express-async-errors' to throw errors for routes.
   // no need to call next() function provided by express to call middleware with err msgs
@@ -12,7 +13,7 @@ const getAllProductsStatic = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
   // in for ex., /api/v1/products?featured=true, featured=true is req.query
-  const { featured, company } = req.query; // pull out only what we need
+  const { featured, company, name } = req.query; // pull out only what we need
   const queryObject = {};
 
   if (featured) {
@@ -21,7 +22,9 @@ const getAllProducts = async (req, res) => {
   if (company) {
     queryObject.company = company;
   }
-
+  if (name) {
+    queryObject.name = { $regex: name, $options: 'i' };
+  }
   console.log(queryObject);
   const products = await Product.find(queryObject);
   res.status(200).json({ products, nbHits: products.length });
