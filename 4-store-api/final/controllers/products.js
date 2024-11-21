@@ -12,11 +12,16 @@ const getAllProductsStatic = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
   // in for ex., /api/v1/products?featured=true, featured=true is req.query
-  const { featured } = req.query; // pull out only what we need
-  const queryObject = {}; // either featured or {} - this helps if we pass properties not in our schema like page=2 for instance
+  const { featured, company } = req.query; // pull out only what we need
+  const queryObject = {};
+
   if (featured) {
     queryObject.featured = featured === 'true' ? true : false;
   }
+  if (company) {
+    queryObject.company = company;
+  }
+
   console.log(queryObject);
   const products = await Product.find(queryObject);
   res.status(200).json({ products, nbHits: products.length });
