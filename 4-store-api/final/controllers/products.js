@@ -23,6 +23,7 @@ const getAllProducts = async (req, res) => {
     queryObject.company = company;
   }
   if (name) {
+    // see mongoDB docs: https://www.mongodb.com/docs/manual/reference/operator/query/regex/#mongodb-query-op.-regex
     queryObject.name = { $regex: name, $options: 'i' };
   }
   console.log(queryObject);
