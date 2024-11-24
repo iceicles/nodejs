@@ -12,7 +12,7 @@ const getAllProductsStatic = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
   // in for ex., /api/v1/products?featured=true, featured=true is req.query
-  const { featured, company, name, sort, fields } = req.query; // pull out only what we need
+  const { featured, company, name, sort, fields, numericFilters } = req.query; // pull out only what we need
   const queryObject = {};
 
   if (featured) {
@@ -25,6 +25,37 @@ const getAllProducts = async (req, res) => {
     // see mongoDB docs: https://www.mongodb.com/docs/manual/reference/operator/query/regex/#mongodb-query-op.-regex
     queryObject.name = { $regex: name, $options: 'i' };
   }
+
+  if (numericFilters) {
+    // setting up user friendly operator maps - > = $gt, < = $lt, etc
+    const operatorMap = {
+      '>': '$gt',
+      '>=': '$gte',
+      '=': '$eq',
+      '<': '$lt',
+      '<=': '$lte',
+    };
+
+    const regEx = /\b(<|>|>=|=|<|<=)\b/g;
+    let filters = numericFilters.replace(
+      regEx,
+      (match) => `-${operatorMap[match]}-`
+    );
+
+    console.log(filters);
+
+    const options = ['price', 'rating'];
+
+    filters = filters.split(',').forEach((item) => {
+      const [field, operator, value] = item.split('-');
+      // only want to filter on price and rating query properties
+      if (options.includes(field)) {
+        queryObject[field] = { [operator]: Number(value) }; // ex: { price: { '$gt': 40 }, rating: { '$gte': 4 } }
+      }
+    });
+  }
+
+  console.log(queryObject);
 
   let result = Product.find(queryObject);
 
