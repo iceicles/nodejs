@@ -28,12 +28,11 @@ const getAllProducts = async (req, res) => {
   if (sort) {
     const sortList = sort.split(',').join(' '); // sort values => name,-price becomes name price as is the req format
     result = result.sort(sortList);
-    // products = products.sort()
     console.log(sort);
   } else {
-    // at this sage, this else block causes an issue if you don't pass sort=createdAt in the url
-    result = sort('createdAt'); // sort by time resource is created
+    result = result.sort('createdAt'); // sort by time resource is created
   }
+
   const products = await result;
   res.status(200).json({ products, nbHits: products.length });
 };
