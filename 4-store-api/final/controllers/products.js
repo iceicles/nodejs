@@ -1,7 +1,9 @@
 const Product = require('../models/product');
 
 const getAllProductsStatic = async (req, res) => {
-  const products = await Product.find({}).sort('-name, price');
+  const products = await Product.find({ price: { $gt: 30 } })
+    .sort('price')
+    .select('name price');
   // we can use the pkg 'express-async-errors' to throw errors for routes.
   // no need to call next() function provided by express to call middleware with err msgs
   // throw new Error('testing async errors');
