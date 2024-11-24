@@ -10,7 +10,7 @@ const getAllProductsStatic = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
   // in for ex., /api/v1/products?featured=true, featured=true is req.query
-  const { featured, company, name, sort } = req.query; // pull out only what we need
+  const { featured, company, name, sort, fields } = req.query; // pull out only what we need
   const queryObject = {};
 
   if (featured) {
@@ -23,14 +23,22 @@ const getAllProducts = async (req, res) => {
     // see mongoDB docs: https://www.mongodb.com/docs/manual/reference/operator/query/regex/#mongodb-query-op.-regex
     queryObject.name = { $regex: name, $options: 'i' };
   }
-  // console.log(queryObject);
+
   let result = Product.find(queryObject);
+
+  // sort
   if (sort) {
     const sortList = sort.split(',').join(' '); // sort values => name,-price becomes name price as is the req format
     result = result.sort(sortList);
-    console.log(sort);
   } else {
     result = result.sort('createdAt'); // sort by time resource is created
+  }
+
+  // fields
+  if (fields) {
+    const fieldsList = fields.split(',').join(' ');
+    result = result.select(fieldsList); // selects only the fields you want to view or exclude (see docs)
+    console.log(fields);
   }
 
   const products = await result;
