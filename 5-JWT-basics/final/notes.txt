@@ -1,0 +1,8 @@
+JWT - JSON Web Token
+
+if a valid token is present in the request, the user can access specific info
+
+for restricted routes - like dashboard - if the token is not present, or not valid, then the server 
+will respond with an error and this is how we can restrict access to certain routes/resources
+
+
