@@ -29,7 +29,20 @@ const login = async (req, res) => {
 };
 
 const dashboard = async (req, res) => {
+  const authHeader = req.headers.authorization;
+
+  // check if the auth header exists - no auth header or doesn't start with 'Bearer '
+  // as seen in authorization properties in request headers
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    throw CustomAPIError('No token provided', 401);
+  }
+
+  // { authorization: 'Bearer eyJhb...'} [1] => eyJ...
+  const token = authHeader.split(' ')[1];
+
+  console.log('token - ', token);
   const luckyNumber = Math.floor(Math.random() * 100);
+
   res.status(200).json({
     msg: `Hello, John Doe`,
     secret: `Here is your authorized data, your lucky number ${luckyNumber}`,
