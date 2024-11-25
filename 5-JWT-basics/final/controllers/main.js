@@ -10,7 +10,7 @@ const login = async (req, res) => {
   const { username, password } = req.body;
   // three ways to verify user/pass - mongo required(in schema) validations, Joi pkg, check in controller
   if (!username || !password) {
-    throw new CustomAPIError('Please provide email and password', 400);
+    throw new CustomAPIError('Please provide username and password', 400);
   }
 
   console.log(username, password);
