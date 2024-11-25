@@ -4,6 +4,7 @@
 - setup authentication so only the request with JWT can access the dashboard
 */
 
+const jwt = require('jsonwebtoken');
 const CustomAPIError = require('../errors/custom-error');
 
 const login = async (req, res) => {
@@ -13,8 +14,18 @@ const login = async (req, res) => {
     throw new CustomAPIError('Please provide username and password', 400);
   }
 
-  console.log(username, password);
-  res.send('Fake Login/Register/Signup Route');
+  // just for demo, normally provided by DB!!
+  const id = new Date().getDate();
+
+  // create a new token payload
+  // try to keep payload small, better experience for user since it'll be transferred everytime the client/user makes a req
+  // the current jwt secret is just for demo, in production, use long, complex, and unguessable string value!!!
+  // expiresIn - expires in 30 days
+  const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
+  });
+
+  res.status(200).json({ msg: 'user created', token });
 };
 
 const dashboard = async (req, res) => {
