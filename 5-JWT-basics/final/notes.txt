@@ -1,12 +1,29 @@
 JWT - JSON Web Token
 
+links -
+good vid - https://www.youtube.com/watch?v=0WH9oiYMS3M&ab_channel=JayPMedia
+more info - https://jwt.io/introduction
+
 if a valid token is present in the request, the user can access specific info
 
 for restricted routes - like dashboard - if the token is not present, or not valid, then the server 
 will respond with an error and this is how we can restrict access to certain routes/resources
 
 
-big picture steps
+big picture steps - 
 - check username, password in post(login) request
 - if it exists, create new JWT on server and send to client
 - setup authentication so only the request with JWT can access the dashboard
+
+we use JWT for it's integrity features. if the token passes validation, it means it's the same token sent to the client and the data wasn't tampered with.
+
+JWT has a stateless nature i.e., the server does not need to store any session information unlike session-based authentication. the server does not remember previous requests sent by the same client - even after the 1st, 2nd, or 200th request, the front end will need to provide the valid token everytime!
+
+JWT structure - 
+- header
+- payload
+- signature
+read more at jwt.io
+
+signing and decoding tokens-
+there are a bunch of pkgs out here, but for this project, JSON web token (https://www.npmjs.com/package/json-web-token) is used to sign and decode our tokens
