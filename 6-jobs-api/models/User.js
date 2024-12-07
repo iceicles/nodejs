@@ -43,4 +43,12 @@ UserSchema.methods.createJWT = function () {
   );
 };
 
+// compare encrypted(hashed) passwords
+// candidatePassword - password as inputed by user in request
+UserSchema.methods.comparePassword = async function (candidatePassword) {
+  // remember, 'this' keyword gives access to schema properties saved in db
+  const isMatch = await bcrypt.compare(candidatePassword, this.password);
+  return isMatch;
+};
+
 module.exports = mongoose.model('User', UserSchema);
