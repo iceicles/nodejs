@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -29,5 +30,17 @@ UserSchema.pre('save', async function () {
   const salt = await bcrypt.genSalt(10); // generate random bytes
   this.password = await bcrypt.hash(this.password, salt); // hash user's password with random bytes
 });
+
+// definine a custom instance method
+// doc - https://mongoosejs.com/docs/guide.html#methods
+UserSchema.methods.createJWT = function () {
+  return jwt.sign(
+    { userId: this._id, name: this.name },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '30d',
+    }
+  );
+};
 
 module.exports = mongoose.model('User', UserSchema);
