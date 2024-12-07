@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -20,6 +21,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide  password'],
   },
+});
+
+// before we save the document, we hash the password
+// doc - https://mongoosejs.com/docs/middleware.html#pre
+UserSchema.pre('save', async function () {
+  const salt = await bcrypt.genSalt(10); // generate random bytes
+  this.password = await bcrypt.hash(this.password, salt); // hash user's password with random bytes
 });
 
 module.exports = mongoose.model('User', UserSchema);
