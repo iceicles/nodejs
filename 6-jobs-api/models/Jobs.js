@@ -25,6 +25,7 @@ const JobSchema = new mongoose.Schema(
       required: [true, 'Please provide user'],
     },
   },
+  // createdAt and updatedAt properties automatically added by mongoose
   { timestamps: true }
 );
 

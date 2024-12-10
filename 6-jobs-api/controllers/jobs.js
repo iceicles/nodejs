@@ -1,3 +1,7 @@
+const Job = require('../models/Jobs');
+const { StatusCodes } = require('http-status-codes');
+const { BadRequestError, NotFoundError } = require('../errors');
+
 const getAllJobs = async (req, res) => {
   res.send('get all jobs');
 };
@@ -7,7 +11,13 @@ const getJob = async (req, res) => {
 };
 
 const createJob = async (req, res) => {
-  res.json(req.user); // testing authmiddleware for this route
+  // add createdBy property on req.body object
+  // set the value of createdBy to the userId from req.user
+  // req.user has userId and name properties as created in auth middleware
+  // and since this middleware gets called first before any job route, we get access to it
+  req.body.createdBy = req.user.userId;
+  const job = await Job.create(req.body);
+  res.status(StatusCodes.CREATED).json({ job }); // testing authmiddleware for this route
 };
 
 const updateJob = async (req, res) => {
