@@ -1,0 +1,7 @@
+In postman, you can setup access token with auth headers dynamically by using this command in Scripts tab - 
+
+const jsonData = pm.response.json()
+pm.globals.set("accessToken", jsonData.token);
+
+
+then in Authorization tab, for any route, choose 'Bearer Token' from the drop down and select {{accessToken}} which is the newly created global variable
