@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const jobSchema = new mongoose.Schema(
+const JobSchema = new mongoose.Schema(
   {
     company: {
       type: String,
@@ -28,4 +28,4 @@ const jobSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Job', jobSchema);
+module.exports = mongoose.model('Job', JobSchema);
