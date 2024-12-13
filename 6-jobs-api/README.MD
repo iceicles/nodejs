@@ -70,9 +70,9 @@ Email Validation Regex
 
 #### Mongoose Errors
 
-- Validation Errors
-- Duplicate (Email)
-- Cast Error
+- Validation Errors (required property in schema)
+- Duplicate (Email - unique property in schema)
+- Cast Error (when id syntax doesn't match what mongoose is looking for)
 
 #### Security
 
