@@ -76,10 +76,10 @@ Email Validation Regex
 
 #### Security
 
-- helmet
-- cors
-- xss-clean
-- express-rate-limit
+- helmet (sets various http headers to prevent numerous attacks)
+- cors (ensures our api is accessible from other domains)
+- xss-clean (santizes user input in req.body, req.query, req.param and protects from cross-site scripting attack)
+- express-rate-limit (limit the amount of request the user can make)
 
 Swagger UI
 
