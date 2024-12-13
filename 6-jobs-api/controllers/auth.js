@@ -3,6 +3,8 @@ const { StatusCodes } = require('http-status-codes');
 const { BadRequestError, UnauthenticatedError } = require('../errors');
 
 const register = async (req, res) => {
+  // no error checking here as mongoose provides validations errors using the 'required' property in schema
+  // however, we are sending a custom message in error-handler.js
   const user = await User.create({ ...req.body });
   const token = user.createJWT();
   res.status(StatusCodes.CREATED).json({ user: { name: user.name }, token });

@@ -15,12 +15,22 @@ const errorHandlerMiddleware = (err, req, res, next) => {
   //   return res.status(err.statusCode).json({ msg: err.message });
   // }
 
+  // handling validation error
+  if (err.name === 'ValidationError') {
+    // console.log(err);
+    customError.msg = Object.values(err.errors)
+      .map((item) => item.message)
+      .join(', ');
+    customError.statusCode = 400;
+  }
+
   // handling duplicate error and sending back a more friendly user response (can be used by frontend)
   // 1100 is the default errCode we receive from mongoose
   if (err.code && err.code === 11000) {
     customError.msg = `Duplicate value entered for ${Object.keys(
       err.keyValue
     )} field, please choose another value`;
+    ``;
     customError.statusCode = 400;
   }
   console.log('or here?');
@@ -29,3 +39,42 @@ const errorHandlerMiddleware = (err, req, res, next) => {
 };
 
 module.exports = errorHandlerMiddleware;
+
+// validation error  -
+// if we uncomment return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ err }); and don't pass password and email
+// when registering we get this in postman -
+// we're checking for validation error to provide custom validation errors when this happens
+/* 
+{
+    "err": {
+        "errors": {
+            "password": {
+                "name": "ValidatorError",
+                "message": "Please provide  password",
+                "properties": {
+                    "message": "Please provide  password",
+                    "type": "required",
+                    "path": "password"
+                },
+                "kind": "required",
+                "path": "password"
+            },
+            "email": {
+                "name": "ValidatorError",
+                "message": "Please provide email",
+                "properties": {
+                    "message": "Please provide email",
+                    "type": "required",
+                    "path": "email"
+                },
+                "kind": "required",
+                "path": "email"
+            }
+        },
+        "_message": "User validation failed",
+        "name": "ValidationError",
+        "message": "User validation failed: password: Please provide  password, email: Please provide email"
+    }
+}
+
+*/
