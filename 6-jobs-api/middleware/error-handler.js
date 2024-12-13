@@ -15,6 +15,12 @@ const errorHandlerMiddleware = (err, req, res, next) => {
   //   return res.status(err.statusCode).json({ msg: err.message });
   // }
 
+  // handling cast error
+  if (err.name === 'CastError') {
+    customError.msg = ` No item found in id: ${err.value}`;
+    customError.statusCode = 404;
+  }
+
   // handling validation error
   if (err.name === 'ValidationError') {
     // console.log(err);
@@ -74,6 +80,24 @@ module.exports = errorHandlerMiddleware;
         "_message": "User validation failed",
         "name": "ValidationError",
         "message": "User validation failed: password: Please provide  password, email: Please provide email"
+    }
+}
+
+*/
+
+// cast error (if we return the entire err object)-
+// cast error happens when the param id (in our case for getting (update or delete) a single job) doesn't exist in the db
+/* 
+{
+    "err": {
+        "stringValue": "\"6758c81acd58f8db4cc533323\"",
+        "valueType": "string",
+        "kind": "ObjectId",
+        "value": "6758c81acd58f8db4cc533323",
+        "path": "_id",
+        "reason": {},
+        "name": "CastError",
+        "message": "Cast to ObjectId failed for value \"6758c81acd58f8db4cc533323\" (type string) at path \"_id\" for model \"Job\""
     }
 }
 
