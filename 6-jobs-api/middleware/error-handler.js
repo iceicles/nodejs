@@ -1,5 +1,8 @@
-const { CustomAPIError } = require('../errors');
+// const { CustomAPIError } = require('../errors');
 const { StatusCodes } = require('http-status-codes');
+
+/* keep in mind, errorHandlerMiddleware is used by express-async-errors whenever we throw an error in our controller (no need to call next() and no need to wrap code in try/catch block)
+/ - the param err (before req, res) is used by this library and any middleware that uses that parameter is called (as is this case) */
 const errorHandlerMiddleware = (err, req, res, next) => {
   let customError = {
     // set default
@@ -7,9 +10,10 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     msg: err.message || 'Something went wrong try again later',
   };
 
-  if (err instanceof CustomAPIError) {
-    return res.status(err.statusCode).json({ msg: err.message });
-  }
+  // not needed since we've created the customError object & still returning a response with it below
+  // if (err instanceof CustomAPIError) {
+  //   return res.status(err.statusCode).json({ msg: err.message });
+  // }
 
   // handling duplicate error and sending back a more friendly user response (can be used by frontend)
   // 1100 is the default errCode we receive from mongoose
@@ -19,6 +23,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     )} field, please choose another value`;
     customError.statusCode = 400;
   }
+  console.log('or here?');
   return res.status(customError.statusCode).json({ msg: customError.msg });
   // return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ err });
 };
