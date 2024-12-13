@@ -81,15 +81,6 @@ Email Validation Regex
 - xss-clean (santizes user input in req.body, req.query, req.param and protects from cross-site scripting attack)
 - express-rate-limit (limit the amount of request the user can make)
 
-Swagger UI
+#### Production
 
-```yaml
-/jobs/{id}:
-  parameters:
-    - in: path
-      name: id
-      schema:
-        type: string
-      required: true
-      description: the job id
-```
+Hosted on render.com (initial deployment: 13-Dec-24)
