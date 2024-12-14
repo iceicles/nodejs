@@ -14,10 +14,6 @@ app.use(express.json());
 const productRouter = require('./routes/productRoutes');
 app.use('/api/v1/products', productRouter);
 
-// upload router
-// const uploadRouter = require('./routes/productRoutes');
-// app.use('/api/v1/products/upload/', uploadRouter);
-
 // error handler
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
