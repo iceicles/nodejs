@@ -7,6 +7,9 @@ const app = express();
 // database
 const connectDB = require('./db/connect');
 
+// access files in public folder
+app.use(express.static('./public'));
+
 // parsing json from req.body
 app.use(express.json());
 
