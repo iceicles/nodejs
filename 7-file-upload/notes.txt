@@ -15,7 +15,11 @@ Then when you upload the file from the client, you access the image src from -
   "image": {
         "src": "/uploads/computer-1.jpeg"
     }
-// above is the response from uploading the file to /products/uploads
+  
+the above payload is the response from uploading the file to /products/uploads
+the front end will listen to any changes in the input, and when there's a new image added, it will send a 
+post request to /products/uploads endpoint which will return the payload
+then the front end will use the src property as part of the req.body when adding the product - i.e., when submit button is clicked. this will make a post call to /products
 
 which gives you access to the image stored on the server. This means, in this project's case, the body can have
 {
