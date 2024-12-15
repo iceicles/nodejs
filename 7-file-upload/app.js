@@ -4,6 +4,8 @@ require('express-async-errors');
 const express = require('express');
 const app = express();
 
+const fileUpload = require('express-fileupload');
+
 // database
 const connectDB = require('./db/connect');
 
@@ -12,6 +14,10 @@ app.use(express.static('./public'));
 
 // parsing json from req.body
 app.use(express.json());
+
+// adds a files object to the req when files (type='file') are sent
+// for example - <input name="foo" type="file" />
+app.use(fileUpload());
 
 // product router
 const productRouter = require('./routes/productRoutes');

@@ -1,0 +1,29 @@
+You can upload files through postman by doing the following:
+- In body tab, choose 'form data'
+- Change the key to 'file'
+- Enter the name of the file
+- Then choose the file from your local computer
+
+Use express-fileupload to access the uploaded file as these files are not available by default.
+
+Then you can store the files on a server (cloudinary for example)
+
+Then send back a response with a correct path (path of the file) on the server
+
+Then when you upload the file from the client, you access the image src from - 
+
+  "image": {
+        "src": "/uploads/computer-1.jpeg"
+    }
+// above is the response from uploading the file to /products/uploads
+
+which gives you access to the image stored on the server. This means, in this project's case, the body can have
+{
+  "name": "product name",
+  "price": "400.99",
+  "img": "computer-1.jpeg" <-- this will be used to find the image on the server
+}
+
+And since we've made the image publicly available, we can access them here - http://localhost:4000/uploads/computer-1.jpeg (using computer-1.jpeg for example)
+
+*Note: files are different from req.body where json is being sent
