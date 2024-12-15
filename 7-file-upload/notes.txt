@@ -4,7 +4,7 @@ You can upload files through postman by doing the following:
 - Enter the name of the file
 - Then choose the file from your local computer
 
-Use express-fileupload to access the uploaded file as these files are not available by default.
+Use express-fileupload to store files on the server, then access the uploaded files as these files are not available by default.
 
 Then you can store the files on a server (cloudinary for example)
 
