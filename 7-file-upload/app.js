@@ -5,6 +5,14 @@ const express = require('express');
 const app = express();
 
 const fileUpload = require('express-fileupload');
+// store images in cloud - cloudinary
+// use v2 (never forget this)
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 // database
 const connectDB = require('./db/connect');
@@ -18,15 +26,6 @@ app.use(express.json());
 // adds a files object to the req when files (type='file') are sent
 // for example - <input name="foo" type="file" />
 app.use(fileUpload());
-
-// store images in cloud - cloudinary
-// use v2 (never forget this)
-const cloudinary = require('cloudinary').v2;
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET,
-});
 
 // product router
 const productRouter = require('./routes/productRoutes');
