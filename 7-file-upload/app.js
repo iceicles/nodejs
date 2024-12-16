@@ -25,7 +25,12 @@ app.use(express.json());
 
 // adds a files object to the req when files (type='file') are sent
 // for example - <input name="foo" type="file" />
-app.use(fileUpload());
+// creating tempdir path with fileupload so cloudinary can use that path for uploading images - bypass all that code in uploadProductImageLocal
+app.use(
+  fileUpload({
+    useTempFiles: true,
+  })
+);
 
 // product router
 const productRouter = require('./routes/productRoutes');

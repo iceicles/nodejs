@@ -1,8 +1,10 @@
 const path = require('path');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
+const cloudinary = require('cloudinary').v2;
 
-const uploadProductImage = async (req, res) => {
+/* This function stores images locally on the server in public/uploads folder */
+const uploadProductImageLocal = async (req, res) => {
   // console.log(req.files);
   // check if file exists
   if (!req.files) {
@@ -40,8 +42,24 @@ const uploadProductImage = async (req, res) => {
     .json({ image: { src: `/uploads/${productImage.name}` } }); // for ex., uploads/computer-1.jpeg
 };
 
+/* This function uploads images to cloudinary */
+const uploadProductImageCloud = async (req, res) => {
+  // upload an image
+  const result = await cloudinary.uploader.upload(
+    req.files.image.tempFilePath,
+    {
+      use_filename: true,
+      folder: '[nodejs course]file-upload',
+    }
+  );
+
+  // console.log('result - ', result);
+  return res.status(StatusCodes.OK).json({ image: { src: result.secure_url } });
+};
+
 module.exports = {
-  uploadProductImage,
+  // uploadProductImageLocal,
+  uploadProductImageCloud,
 };
 
 /*
@@ -58,4 +76,20 @@ sample reponse from req.files after using fileupload pkg
     md5: '2a300e280a3a84e9ede0468f0530ccd1',
     mv: [Function: mv]
   }
+*/
+
+/* sample response from cloudinary after uploading image - 
+
+result -  {
+  width: 1000,
+  height: 1407,
+  format: 'jpg',
+  resource_type: 'image',
+  created_at: '2024-12-16T02:59:41Z',
+  placeholder: false,
+  url: 'http://res.cloudinary.com/dzodbyzxe/image/upload/v1734317981/%5Bnodejs%20course%5Dfile-upload/tmp-1-1734317986549_drwtgd.jpg',
+  secure_url: 'https://res.cloudinary.com/dzodbyzxe/image/upload/v1734317981/%5Bnodejs%20course%5Dfile-upload/tmp-1-1734317986549_drwtgd.jpg',  
+  ...
+}
+
 */
