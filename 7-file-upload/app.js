@@ -19,6 +19,15 @@ app.use(express.json());
 // for example - <input name="foo" type="file" />
 app.use(fileUpload());
 
+// store images in cloud - cloudinary
+// use v2 (never forget this)
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
+
 // product router
 const productRouter = require('./routes/productRoutes');
 app.use('/api/v1/products', productRouter);
