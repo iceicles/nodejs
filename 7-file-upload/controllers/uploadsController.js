@@ -2,6 +2,7 @@ const path = require('path');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
 
 /* This function stores images locally on the server in public/uploads folder */
 const uploadProductImageLocal = async (req, res) => {
@@ -52,6 +53,9 @@ const uploadProductImageCloud = async (req, res) => {
       folder: '[nodejs course]file-upload',
     }
   );
+
+  // removing temp image file once we've successfully uploaded to cloudinary so we don't store them locally (in server) in /tmp folder
+  fs.unlinkSync(req.files.image.tempFilePath);
 
   // console.log('result - ', result);
   return res.status(StatusCodes.OK).json({ image: { src: result.secure_url } });
