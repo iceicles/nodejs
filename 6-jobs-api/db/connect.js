@@ -1,4 +1,3 @@
-// not used in this project
 const mongoose = require('mongoose');
 
 const connectDB = (url) => {
