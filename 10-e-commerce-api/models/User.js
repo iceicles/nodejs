@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    unique: true, // mongoose will throw 'duplicate error'. can check in controller as well
     required: [true, 'Please provide email'],
     validate: {
       validator: validator.isEmail, // alternative approach to previous implementations
