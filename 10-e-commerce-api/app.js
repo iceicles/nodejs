@@ -6,6 +6,7 @@ const app = express();
 
 // rest of packages
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 
 // database
 const connectDB = require('./db/connect');
@@ -19,9 +20,14 @@ const errorHandlerMW = require('./middleware/error-handler');
 
 app.use(morgan('tiny'));
 app.use(express.json());
+app.use(cookieParser());
 
 // routes
 app.get('/', (req, res) => {
+  res.send('<h1>E-commerce API</h1>');
+});
+app.get('/api/v1', (req, res) => {
+  console.log('cookies from frontend - ', req.cookies);
   res.send('<h1>E-commerce API</h1>');
 });
 
