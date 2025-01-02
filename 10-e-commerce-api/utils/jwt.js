@@ -17,10 +17,12 @@ const attachCookiesToResponse = ({ res, user }) => {
   const token = createJWT({ payload: user });
 
   const oneDay = 1000 * 60 * 60 * 24;
-  // set token in cookies
+  // set token in cookies - https://expressjs.com/en/api.html#res.cookie
   res.cookie('token', token, {
     httpOnly: true, // cookie can only be set/modified by (set-cookie) from server not document.cookie
     expires: new Date(Date.now() + oneDay),
+    secure: process.env.NODE_ENV === 'production', // secure (http*S*) only in prod
+    signed: true,
   });
 };
 

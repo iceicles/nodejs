@@ -20,14 +20,16 @@ const errorHandlerMW = require('./middleware/error-handler');
 
 app.use(morgan('tiny'));
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser(process.env.JWT_SECRET)); // signing cookies with JWT SECRET
 
 // routes
 app.get('/', (req, res) => {
   res.send('<h1>E-commerce API</h1>');
 });
 app.get('/api/v1', (req, res) => {
-  console.log('cookies from frontend - ', req.cookies);
+  // regular cookies - req.cookies
+  // signed cookies - req.signedCookies
+  console.log('cookies from frontend - ', req.signedCookies);
   res.send('<h1>E-commerce API</h1>');
 });
 
