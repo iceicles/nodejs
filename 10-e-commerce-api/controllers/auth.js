@@ -51,7 +51,13 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  res.send('logout user');
+  // setting the same 'token' key in cookies to a different value (instead of JWT) for this route
+  res.cookie('token', 'logout', {
+    httpOnly: true,
+    expires: new Date(Date.now()), // expire the token value at that current time
+  });
+  // can simply send this - res.send('')
+  res.status(StatusCodes.OK).json({ msg: 'user logged out' });
 };
 
 module.exports = {
