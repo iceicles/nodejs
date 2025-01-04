@@ -3,6 +3,8 @@ const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 
 const getAllUsers = async (req, res) => {
+  // accessing req.user from authentication middlware (if token is valid)
+  console.log('req.user - ', req.user);
   const user = await User.find({ role: 'user' }).select('-password');
   res.status(StatusCodes.OK).json({ user });
 };
