@@ -22,13 +22,25 @@ const authenticateUser = async (req, res, next) => {
       role: payload.role,
     };
     // console.log(payload);
-    //then call next middleware (getAllUsers, getSingleUser, etc)
+    //then call next middleware (authorizePermissions)
     next();
   } catch (error) {
     throw new CustomError.UnauthenticatedError('Authentication Invalid');
   }
 };
 
+/* authorizing user's based on role - admin/guest */
+const authorizePermissions = (req, res, next) => {
+  const { role } = req.user; // passed from authenticateUser
+  if (role !== 'admin') {
+    throw new CustomError.UnauthorizedError(
+      'Unauthorized to access this route'
+    );
+  }
+  next(); //then call next middleware (getAllUsers, getSingleUser, etc)
+};
+
 module.exports = {
   authenticateUser,
+  authorizePermissions,
 };
