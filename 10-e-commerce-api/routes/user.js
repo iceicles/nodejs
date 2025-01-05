@@ -33,7 +33,7 @@ router
 // a workaround will be to have something like /user(or admin) /showMe (or updateUser, updateUserPassword)
 router.route('/showMe').get(authenticateUser, showCurrentUser);
 router.route('/updateUser').patch(updateUser);
-router.route('/updateUserPassword').patch(updateUserPassword);
+router.route('/updateUserPassword').patch(authenticateUser, updateUserPassword);
 
 router.route('/:id').get(authenticateUser, getSingleUser);
 
