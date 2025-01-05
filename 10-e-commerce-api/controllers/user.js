@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
+const { createTokenUser, attachCookiesToResponse } = require('../utils');
 
 const getAllUsers = async (req, res) => {
   // accessing req.user from authentication middlware (if token is valid)
@@ -23,8 +24,32 @@ const showCurrentUser = async (req, res) => {
   // accessing req.user from authentication middlware
   res.status(StatusCodes.OK).json({ user: req.user });
 };
+
+// updating user info like name, and/or email
 const updateUser = async (req, res) => {
-  res.send('update user');
+  const { name, email } = req.body;
+
+  // if name or email is not inputed at all by user
+  if (!name || !email) {
+    throw new CustomError.BadRequestError('Please provide all values');
+  }
+
+  // find the specific user using userId from req.user - since we may be updating name or email and we want to get the specific user making the change
+  // filter by id
+  // update email and/or name
+  // new = true -> return modified doc rather than original
+  // runValidators = true -> run update validators against model's schema
+  // read more - https://mongoosejs.com/docs/api/model.html#Model.findOneAndUpdate()
+  const user = await User.findOneAndUpdate(
+    { _id: req.user.userId },
+    { email, name },
+    { new: true, runValidators: true }
+  );
+
+  // create a new token with updated/new info and attach cookie to response
+  const tokenUser = createTokenUser(user);
+  attachCookiesToResponse({ res, user: tokenUser });
+  res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
 // user needs to be authenticated (or at least hit the auth MW) to access this controller bc we need the id
