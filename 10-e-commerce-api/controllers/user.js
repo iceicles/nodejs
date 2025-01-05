@@ -18,8 +18,10 @@ const getSingleUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ user });
 };
 
+// the client should call this endpoint first in the /login, /register, etc routes to check if there is a user (i.e., valid token) & authenticate them
 const showCurrentUser = async (req, res) => {
-  res.send('show current user');
+  // accessing req.user from authentication middlware
+  res.status(StatusCodes.OK).json({ user: req.user });
 };
 const updateUser = async (req, res) => {
   res.send('update user');
