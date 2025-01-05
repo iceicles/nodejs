@@ -25,6 +25,7 @@ const showCurrentUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ user: req.user });
 };
 
+// update user with user.save()
 // updating user info like name, and/or email
 const updateUser = async (req, res) => {
   const { name, email } = req.body;
@@ -34,17 +35,19 @@ const updateUser = async (req, res) => {
     throw new CustomError.BadRequestError('Please provide all values');
   }
 
-  // find the specific user using userId from req.user - since we may be updating name or email and we want to get the specific user making the change
-  // filter by id
-  // update email and/or name
-  // new = true -> return modified doc rather than original
-  // runValidators = true -> run update validators against model's schema
-  // read more - https://mongoosejs.com/docs/api/model.html#Model.findOneAndUpdate()
-  const user = await User.findOneAndUpdate(
-    { _id: req.user.userId },
-    { email, name },
-    { new: true, runValidators: true }
-  );
+  // find the specific user using userId from req.user
+  const user = await User.findOne({ _id: req.user.userId });
+
+  // update properties
+  user.email = email;
+  user.name = name;
+
+  // then update document
+  // NOTE: since we hash the password in pre save hook, this WILL CHANGE THE USER'S PASSWORD!!!!!
+  // so even if udpateUser controller updates the user, the user's password will be re-hashed, therefore changed in db!!!!!!
+  // this will mean the user can no longer login with the previous password
+  // to get around this, wse use `!this.isModified('password')` in schema
+  await user.save();
 
   // create a new token with updated/new info and attach cookie to response
   const tokenUser = createTokenUser(user);
@@ -91,3 +94,33 @@ module.exports = {
   updateUser,
   updateUserPassword,
 };
+
+/* 
+updateUser using findOneAndUpdate()
+// updating user info like name, and/or email
+const updateUser = async (req, res) => {
+  const { name, email } = req.body;
+
+  // if name or email is not inputed at all by user
+  if (!name || !email) {
+    throw new CustomError.BadRequestError('Please provide all values');
+  }
+
+  // find the specific user using userId from req.user - since we may be updating name or email and we want to get the specific user making the change
+  // filter by id
+  // update email and/or name
+  // new = true -> return modified doc rather than original
+  // runValidators = true -> run update validators against model's schema
+  // read more - https://mongoosejs.com/docs/api/model.html#Model.findOneAndUpdate()
+  const user = await User.findOneAndUpdate(
+    { _id: req.user.userId },
+    { email, name },
+    { new: true, runValidators: true }
+  );
+
+  // create a new token with updated/new info and attach cookie to response
+  const tokenUser = createTokenUser(user);
+  attachCookiesToResponse({ res, user: tokenUser });
+  res.status(StatusCodes.OK).json({ user: tokenUser });
+};
+ */

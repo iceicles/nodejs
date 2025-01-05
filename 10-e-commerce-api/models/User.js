@@ -32,6 +32,14 @@ const UserSchema = new mongoose.Schema({
 
 // hash user's inputed password
 UserSchema.pre('save', async function () {
+  // recall that 'this' is referring to the schema
+  // console.log(this.modifiedPaths()); // the values being modified (name, email, etc)
+  // console.log(this.isModified('name')); // if 'name' is modified
+
+  // only want to re-hash the user's password if it's being modified
+  // i.e., when we're creating a new user (register) or modifying the password (updateUserPassword)
+  if (!this.isModified('password')) return; // not modifying the password ? then return
+
   const salt = await bcrypt.genSalt(10); // generate random bytes
   this.password = await bcrypt.hash(this.password, salt); // hash password with salt
 });
