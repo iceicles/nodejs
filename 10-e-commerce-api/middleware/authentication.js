@@ -29,15 +29,20 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
-/* authorizing user's based on role - admin/guest */
-const authorizePermissions = (req, res, next) => {
-  const { role } = req.user; // passed from authenticateUser
-  if (role !== 'admin') {
-    throw new CustomError.UnauthorizedError(
-      'Unauthorized to access this route'
-    );
-  }
-  next(); //then call next middleware (getAllUsers, getSingleUser, etc)
+/* authorizing user's based on role - admin/guest 
+  {param} roles - spread operator 'roles' so we have multiple roles checked
+*/
+const authorizePermissions = (...roles) => {
+  // returning a function to be used as a callback for express so we don't immediately invoking authorizePermissions func when calling it in the router (which we need to do)
+  return (req, res, next) => {
+    // req.user.role is passed from authenticateUser MW func
+    if (!roles.includes(req.user.role)) {
+      throw new CustomError.UnauthorizedError(
+        'Unauthorized to access this route'
+      );
+    }
+    next(); //then call next middleware (getAllUsers, etc)
+  };
 };
 
 module.exports = {
