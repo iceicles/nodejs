@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const ReviewModel = new mongoose.Schema(
+const ReviewSchema = new mongoose.Schema(
   {
     rating: {
       type: Number,
@@ -25,7 +25,7 @@ const ReviewModel = new mongoose.Schema(
       required: true,
     },
     product: {
-      // every review ill be tied to a product
+      // every review ill be tied tyo a product
 
       type: mongoose.Types.ObjectId,
       ref: 'Product', // product model
