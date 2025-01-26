@@ -3,6 +3,7 @@ const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const { attachCookiesToResponse, createTokenUser } = require('../utils');
 const crypto = require('crypto');
+const sendEmail = require('../utils/sendEmail');
 
 const register = async (req, res) => {
   const { email, name, password } = req.body;
@@ -27,10 +28,11 @@ const register = async (req, res) => {
     verificationToken,
   });
 
+  await sendEmail();
+
   // send verification token only while testing in postman!!!
   res.status(StatusCodes.CREATED).json({
-    msg: 'Success! Please check your email to verifiy account',
-    verificationToken: user.verificationToken,
+    msg: 'Success! Please check your email to verify account',
   });
 };
 const login = async (req, res) => {
