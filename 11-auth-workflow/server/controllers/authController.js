@@ -63,7 +63,24 @@ const login = async (req, res) => {
 const verifyEmail = async (req, res) => {
   const { verificationToken, email } = req.body;
 
-  res.status(StatusCodes.OK).json({ verificationToken, email });
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new CustomError.UnauthenticatedError('Verification Failed');
+  }
+
+  if (user.verificationToken !== verificationToken) {
+    throw new CustomError.UnauthenticatedError('Verification Failed');
+  }
+
+  // if everything's ok
+  user.isVerified = true;
+  user.verified = Date.now();
+  user.verificationToken = ''; // second time user makes the request, the verification token won't match
+
+  await user.save();
+
+  res.status(StatusCodes.OK).json({ msg: 'Email Verified' });
 };
 
 const logout = async (req, res) => {
