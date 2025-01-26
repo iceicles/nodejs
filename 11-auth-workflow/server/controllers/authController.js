@@ -59,6 +59,13 @@ const login = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ user: tokenUser });
 };
+
+const verifyEmail = async (req, res) => {
+  const { verificationToken, email } = req.body;
+
+  res.status(StatusCodes.OK).json({ verificationToken, email });
+};
+
 const logout = async (req, res) => {
   res.cookie('token', 'logout', {
     httpOnly: true,
@@ -71,4 +78,5 @@ module.exports = {
   register,
   login,
   logout,
+  verifyEmail,
 };
