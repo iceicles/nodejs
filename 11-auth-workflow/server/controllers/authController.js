@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Token = require('../models/Token');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const {
@@ -38,6 +39,8 @@ const register = async (req, res) => {
   Notes on proxy --
   frontend (reverse) proxy for api requests allowing communication with the backend on a different port while bypassing same-origin policy restrictions
   the reverse proxy (another server), accepts connection requests from our backend and forwards them to our frontend on localhost:3000 (or another server), then sends the reply of our server to the frontend original connection request 
+
+  these are all from request headers -- 
 
   const tempOrigin = req.get('origin'); // frontend (or reverse ) proxy
   const protocol = req.protocol;
