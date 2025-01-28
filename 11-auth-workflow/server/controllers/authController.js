@@ -33,6 +33,28 @@ const register = async (req, res) => {
 
   const origin = 'http://localhost:3000';
 
+  /*  
+
+  Notes on proxy --
+  frontend (reverse) proxy for api requests allowing communication with the backend on a different port while bypassing same-origin policy restrictions
+  the reverse proxy (another server), accepts connection requests from our backend and forwards them to our frontend on localhost:3000 (or another server), then sends the reply of our server to the frontend original connection request 
+
+  const tempOrigin = req.get('origin'); // frontend (or reverse ) proxy
+  const protocol = req.protocol;
+  const host = req.get('host');
+  const forwardedHost = req.get('x-forwarded-host');
+  const forwardedProtocol = req.get('x-forwarded-proto'); 
+  
+
+  tempOrigin : http://localhost:4000/
+  host : localhost:4000
+  protocol : http
+  forwardedHost : localhost:3000
+  forwardedProtocol : http
+    
+  
+  */
+
   await sendVerificationEmail({
     name: user.name,
     email: user.email,
