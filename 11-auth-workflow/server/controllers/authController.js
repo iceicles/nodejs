@@ -91,9 +91,10 @@ const login = async (req, res) => {
     throw new CustomError.UnauthenticatedError('Please verify your email');
   }
 
+  // creates object used to sign the token
   const tokenUser = createTokenUser(user);
 
-  // create refresh token
+  // initialize refresh token to empty string
   let refreshToken = '';
   // check for existing token
   const existingToken = await Token.findOne({ user: user._id });
@@ -107,6 +108,7 @@ const login = async (req, res) => {
     }
 
     refreshToken = existingToken.refreshToken;
+    // creates both access and refresh tokens
     attachCookiesToResponse({ res, user: tokenUser, refreshToken });
     res.status(StatusCodes.OK).json({ user: tokenUser });
     return;
@@ -117,9 +119,10 @@ const login = async (req, res) => {
   const ip = req.ip;
   const userToken = { refreshToken, ip, userAgent, user: user._id };
 
-  // create token
+  // creates token document
   await Token.create(userToken);
 
+  // creates both access and refresh tokens
   attachCookiesToResponse({ res, user: tokenUser, refreshToken });
 
   res.status(StatusCodes.OK).json({ user: tokenUser });

@@ -7,7 +7,7 @@ const createJWT = ({ payload }) => {
   return token;
 };
 
-const isTokenValid = ({ token }) => jwt.verify(token, process.env.JWT_SECRET);
+const isTokenValid = (token) => jwt.verify(token, process.env.JWT_SECRET);
 
 const attachCookiesToResponse = ({ res, user, refreshToken }) => {
   // access tokens should expire quicker than refresh tokens - they can be 15mins, 1hr, 1day, etc but they MUST have a short TTL
